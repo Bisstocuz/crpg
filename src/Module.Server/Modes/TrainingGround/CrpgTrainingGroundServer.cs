@@ -784,7 +784,8 @@ internal class CrpgTrainingGroundServer : MissionMultiplayerGameModeBase
         if (_rewardTickTimer!.Check(reset: true))
         {
             _ = _rewardServer.UpdateCrpgUsersAsync(
-                durationRewarded: _rewardTickTimer.GetTimerDuration() * 0.75f,
+                durationRewarded: _rewardTickTimer.GetTimerDuration() * 0.0f, // remove TrainingGround Reward (Winnie)
+                // durationRewarded: _rewardTickTimer.GetTimerDuration() * 0.75f,
                 durationUpkeep: 0,
                 updateUserStats: false);
         }
