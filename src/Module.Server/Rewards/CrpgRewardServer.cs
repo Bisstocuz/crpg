@@ -249,8 +249,10 @@ internal class CrpgRewardServer : MissionLogic
             return;
         }
 
-        bool veryLowPopulationServer = networkPeers.Length < 2;
-        bool lowPopulationServer = !_isLowPopulationUpkeepEnabled && networkPeers.Length < 12;
+        // bool veryLowPopulationServer = networkPeers.Length < 2;
+        // bool lowPopulationServer = !_isLowPopulationUpkeepEnabled && networkPeers.Length < 12;
+        bool veryLowPopulationServer = networkPeers.Length < 10; // change veryLowPopulationServer from 2 to 10, servers with fewer than this number can only get x1 reward (Winnie)
+        bool lowPopulationServer = false; // remove LowPopulationUpkeep (Winnie)
         // Force constant multiplier if there is low population.
         constantMultiplier = veryLowPopulationServer ? ExperienceMultiplierMin : constantMultiplier;
 
@@ -636,12 +638,15 @@ internal class CrpgRewardServer : MissionLogic
         foreach (var equippedItem in crpgPeer.LastSpawnInfo!.EquippedItems)
         {
             var mbItem = Game.Current.ObjectManager.GetObject<ItemObject>(equippedItem.UserItem.ItemId);
-            if (_random.NextDouble() >= _constants.ItemBreakChance)
+            /*
+            if (_random.NextDouble() >= _constants.ItemBreakChance) // remove random upkeep (Winnie)
             {
                 continue;
             }
 
             int repairCost = (int)(mbItem.Value * roundDuration * _constants.ItemRepairCostPerSecond);
+            */
+            int repairCost = (int)(mbItem.Value * roundDuration * _constants.ItemRepairCostPerSecond * _constants.ItemBreakChance);
             brokenItems.Add(new CrpgUserDamagedItem
             {
                 UserItemId = equippedItem.UserItem.Id,
